@@ -88,7 +88,7 @@ export function Faq() {
                   <span className="font-roast-mono shrink-0 text-xs font-bold text-roast">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="font-display flex-1 text-base font-bold sm:text-lg">{f.q}</span>
+                  <h3 className="font-display flex-1 text-base font-bold sm:text-lg">{f.q}</h3>
                   <span
                     className={cn(
                       "grid size-8 shrink-0 place-items-center rounded-full border transition-all duration-300",
