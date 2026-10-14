@@ -19,6 +19,7 @@ import { Footer } from "@/components/landing/Footer";
 import { LogoMark } from "@/components/landing/Logo";
 import { ScoreGauge } from "@/components/roast/ScoreGauge";
 import { Typewriter } from "@/components/roast/Typewriter";
+import { BackButton } from "@/components/ui/back-button";
 import { TakeoutUpload } from "@/components/roast/TakeoutUpload";
 import type { TakeoutSummary } from "@/lib/i18n-roast";
 import { signOut, useSession } from "@/lib/auth-client";
@@ -182,6 +183,9 @@ export default function RoastPage() {
     <div className="flex min-h-screen flex-col bg-void text-white">
       <Navbar />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6">
+        <div className="mb-6">
+          <BackButton />
+        </div>
         {/* header row */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>

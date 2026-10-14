@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Logo } from "@/components/landing/Logo";
+import { BackButton } from "@/components/ui/back-button";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Reveal } from "@/components/landing/primitives";
@@ -30,8 +31,9 @@ export default function TermsPage() {
       <Navbar />
       <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-12 sm:px-6 sm:py-16">
       <Reveal>
-        <div className="mb-8 inline-block">
+        <div className="mb-8 flex items-center justify-between gap-4">
           <Logo href="/" idSuffix="terms" />
+          <BackButton />
         </div>
         <p className="font-roast-mono text-xs font-bold tracking-[0.25em] text-roast">
           LEGAL — TERMS OF SERVICE
