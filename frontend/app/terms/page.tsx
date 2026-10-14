@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Logo } from "@/components/landing/Logo";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -31,9 +30,9 @@ export default function TermsPage() {
       <Navbar />
       <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-12 sm:px-6 sm:py-16">
       <Reveal>
-        <Link href="/" className="mb-8 inline-block">
-          <Logo idSuffix="terms" />
-        </Link>
+        <div className="mb-8 inline-block">
+          <Logo href="/" idSuffix="terms" />
+        </div>
         <p className="font-roast-mono text-xs font-bold tracking-[0.25em] text-roast">
           LEGAL — TERMS OF SERVICE
         </p>

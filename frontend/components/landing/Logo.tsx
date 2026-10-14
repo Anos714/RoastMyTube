@@ -52,13 +52,15 @@ export function Logo({
   markClass = "size-9",
   compact = false,
   idSuffix = "a",
+  href = "#top",
 }: {
   markClass?: string;
   compact?: boolean;
   idSuffix?: string;
+  href?: string;
 }) {
   return (
-    <a href="#top" className="group flex items-center gap-2.5" aria-label="RoastMyTube home">
+    <a href={href} className="group flex items-center gap-2.5" aria-label="RoastMyTube home">
       <span className="transition-transform duration-300 ease-out group-hover:-rotate-[10deg] group-hover:scale-110">
         <LogoMark className={cn(markClass, "drop-shadow-[0_0_18px_rgba(255,0,51,0.45)]")} idSuffix={idSuffix} />
       </span>
