@@ -56,6 +56,35 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full dark">
       <body className="min-h-full flex flex-col bg-void text-white antialiased">
+        {/* GEO: site identity for AI engines and rich results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  name: "RoastMyTube",
+                  url: siteUrl,
+                  description:
+                    "AI roasts based on your YouTube history. Brain-Rot Score, red flags and shareable roast cards in English + Hinglish.",
+                  inLanguage: "en",
+                },
+                {
+                  "@type": "Organization",
+                  name: "RoastMyTube",
+                  url: siteUrl,
+                  founder: {
+                    "@type": "Person",
+                    name: "Rahul Sain",
+                    url: "https://rahulxcode.vercel.app",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
         {children}
         <Toaster theme="dark" position="bottom-center" toastOptions={{ style: { background: "#131313", border: "1px solid #262626" } }} />
       </body>
