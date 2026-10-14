@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Trash2, Unplug, LogOut, Loader2, ShieldCheck, Flame } from "lucide-react";
+import { Trash2, Unplug, UserX, LogOut, Loader2, ShieldCheck, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Reveal } from "@/components/landing/primitives";
@@ -23,6 +24,7 @@ export default function ProfilePage() {
   const { data: session, isPending } = useSession();
   const [status, setStatus] = useState<YtStatus | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [pending, setPending] = useState<null | "history" | "disconnect" | "account">(null);
 
   useEffect(() => {
     if (!isPending && !session) router.replace("/login");
@@ -60,7 +62,6 @@ export default function ProfilePage() {
   }, [session]);
 
   const clearHistory = async () => {
-    if (!confirm("Delete all your roast reports? This can't be undone.")) return;
     setBusy("history");
     try {
       const res = await fetch("/api/roast/history", { method: "DELETE" });
@@ -70,11 +71,11 @@ export default function ProfilePage() {
       } else toast("Delete failed — try again");
     } finally {
       setBusy(null);
+      setPending(null);
     }
   };
 
   const disconnect = async () => {
-    if (!confirm("Disconnect YouTube? You'll re-consent on next login.")) return;
     setBusy("disconnect");
     try {
       const res = await fetch("/api/account/google", { method: "DELETE" });
@@ -85,8 +86,45 @@ export default function ProfilePage() {
       } else toast("Disconnect failed — try again");
     } finally {
       setBusy(null);
+      setPending(null);
     }
   };
+
+  const deleteAccount = async () => {
+    setBusy("account");
+    try {
+      const res = await fetch("/api/account", { method: "DELETE" });
+      if (res.ok) {
+        toast("Account deleted — it was fun roasting you");
+        await signOut();
+        router.push("/");
+      } else toast("Delete failed — try again");
+    } finally {
+      setBusy(null);
+      setPending(null);
+    }
+  };
+
+  const MODALS = {
+    history: {
+      title: "Delete roast history?",
+      description: "All your saved roast reports will be permanently deleted. This can't be undone.",
+      confirmLabel: "Delete history",
+      run: clearHistory,
+    },
+    disconnect: {
+      title: "Disconnect YouTube?",
+      description: "Google access is revoked and you're signed out. Next login asks for consent again.",
+      confirmLabel: "Disconnect",
+      run: disconnect,
+    },
+    account: {
+      title: "Delete your account?",
+      description: "Everything goes: profile, sessions, all roast reports. Gone forever. The roasts were great while they lasted.",
+      confirmLabel: "Delete everything",
+      run: deleteAccount,
+    },
+  } as const;
 
   if (isPending) {
     return (
@@ -182,33 +220,53 @@ export default function ProfilePage() {
               <p className="font-roast-mono text-xs font-bold tracking-[0.25em] text-roast">
                 DANGER ZONE
               </p>
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 <Button
                   variant="outline"
-                  className="flex-1 border-roast/40 hover:border-roast hover:bg-roast/10"
+                  className="border-roast/40 hover:border-roast hover:bg-roast/10"
                   disabled={busy != null}
-                  onClick={() => void clearHistory()}
+                  onClick={() => setPending("history")}
                 >
                   <Trash2 /> {busy === "history" ? "Deleting…" : "Delete roast history"}
                 </Button>
                 <Button
                   variant="outline"
-                  className="flex-1 border-roast/40 hover:border-roast hover:bg-roast/10"
+                  className="border-roast/40 hover:border-roast hover:bg-roast/10"
                   disabled={busy != null}
-                  onClick={() => void disconnect()}
+                  onClick={() => setPending("disconnect")}
                 >
                   <Unplug /> {busy === "disconnect" ? "Working…" : "Disconnect YouTube"}
+                </Button>
+                <Button
+                  variant="roast"
+                  disabled={busy != null}
+                  onClick={() => setPending("account")}
+                >
+                  <UserX /> {busy === "account" ? "Deleting…" : "Delete my account"}
                 </Button>
               </div>
               <p className="mt-3 text-xs text-muted">
                 History deletes only your saved reports. Disconnect revokes Google access and signs
-                you out — next login re-asks consent.
+                you out — next login re-asks consent. Delete my account wipes everything: profile,
+                sessions, reports. Forever.
               </p>
             </div>
           </div>
         </Reveal>
       </main>
       <Footer />
+      {pending && (
+        <ConfirmModal
+          open
+          title={MODALS[pending].title}
+          description={MODALS[pending].description}
+          confirmLabel={MODALS[pending].confirmLabel}
+          busy={busy != null}
+          busyLabel="Working…"
+          onConfirm={() => void MODALS[pending].run()}
+          onClose={() => (busy == null ? setPending(null) : undefined)}
+        />
+      )}
     </div>
   );
 }
