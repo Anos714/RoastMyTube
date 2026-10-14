@@ -5,6 +5,7 @@ import {
   buildRoastPrompt,
   type RoastLanguage,
   type RoastReport,
+  type TakeoutSummary,
 } from "./i18n-roast";
 import type { YouTubeProfile } from "./youtube";
 import { LlmRateError, RoastFailedError } from "./errors";
@@ -95,12 +96,13 @@ export type RoastResult = RoastReport & { language: string; hinglish_blocked?: b
 /** L1 Groq 120b → L2 Groq 20b (own quota pool) → L3 Gemini. Hinglish block → full chain in English. */
 export async function generateRoast(
   profile: YouTubeProfile,
-  language: RoastLanguage
+  language: RoastLanguage,
+  takeout?: TakeoutSummary
 ): Promise<RoastResult> {
   let rateLimitedLevels = 0;
 
   const runChain = async (lang: RoastLanguage): Promise<RoastReport> => {
-    const { system, user } = buildRoastPrompt(profile, lang);
+    const { system, user } = buildRoastPrompt(profile, lang, takeout);
     const levels: { label: string; call: () => Promise<RoastReport> }[] = [
       { label: `groq:${L1}`, call: () => tryLevel(() => callGroq(L1, system, user), "l1") },
       { label: `groq:${L2}`, call: () => tryLevel(() => callGroq(L2, system, user), "l2") },

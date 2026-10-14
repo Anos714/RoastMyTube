@@ -19,6 +19,8 @@ import { Footer } from "@/components/landing/Footer";
 import { LogoMark } from "@/components/landing/Logo";
 import { ScoreGauge } from "@/components/roast/ScoreGauge";
 import { Typewriter } from "@/components/roast/Typewriter";
+import { TakeoutUpload } from "@/components/roast/TakeoutUpload";
+import type { TakeoutSummary } from "@/lib/i18n-roast";
 import { signOut, useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
@@ -90,6 +92,7 @@ export default function RoastPage() {
   const [step, setStep] = useState(0);
   const [history, setHistory] = useState<HistoryRow[]>([]);
   const [replay, setReplay] = useState(0);
+  const [takeout, setTakeout] = useState<TakeoutSummary | null>(null);
 
   useEffect(() => {
     if (!isPending && !session) router.replace("/login");
@@ -135,7 +138,7 @@ export default function RoastPage() {
       const res = await fetch("/api/roast", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ language: lang }),
+        body: JSON.stringify({ language: lang, ...(takeout ? { takeout } : {}) }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -232,6 +235,9 @@ export default function RoastPage() {
                 We&apos;ll pull your likes, subs &amp; playlists and hand them to AI with one
                 instruction: no survivors.
               </p>
+              <div className="mx-auto mt-6 max-w-md text-left">
+                <TakeoutUpload value={takeout} onChange={setTakeout} />
+              </div>
               <Button size="lg" variant="roast" onClick={start} className="btn-shine mt-6">
                 <LogoMark className="size-5" idSuffix="roast-go" />
                 Roast me in {lang === "en" ? "English" : "Hinglish"}

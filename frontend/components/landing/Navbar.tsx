@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FolderGit2, LogOut } from "lucide-react";
+import { FolderGit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LogoMark, Logo } from "./Logo";
-import { signOut, useSession } from "@/lib/auth-client";
+import { UserMenu } from "./UserMenu";
+import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -54,16 +55,7 @@ export function Navbar() {
             <FolderGit2 className="size-5" />
           </Button>
           {!isPending && session ? (
-            <>
-              <a href="/roast">
-                <Button variant="outline" size="sm" className="sm:h-10 sm:px-5 sm:text-sm">
-                  My Roasts
-                </Button>
-              </a>
-              <Button variant="ghost" size="icon" onClick={() => signOut()} aria-label="Sign out">
-                <LogOut className="size-5" />
-              </Button>
-            </>
+            <UserMenu />
           ) : (
             <a href="/login">
               <Button
