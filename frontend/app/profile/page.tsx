@@ -9,6 +9,7 @@ import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Reveal } from "@/components/landing/primitives";
+import { BackButton } from "@/components/ui/back-button";
 import { signOut, useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 
@@ -141,6 +142,9 @@ export default function ProfilePage() {
     <div className="flex min-h-screen flex-col bg-void text-white">
       <Navbar />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6">
+        <div className="mb-6">
+          <BackButton />
+        </div>
         <Reveal>
           <p className="font-roast-mono text-xs font-bold tracking-[0.25em] text-roast">
             ACCOUNT — 04

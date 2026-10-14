@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { BackButton } from "@/components/ui/back-button";
 import { motion } from "framer-motion";
 import { Play, ShieldCheck, EyeOff, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -39,8 +40,12 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative w-full max-w-md rounded-3xl border border-line bg-card p-8 text-center sm:p-10"
+        className="relative w-full max-w-md"
       >
+        <div className="mb-4">
+          <BackButton />
+        </div>
+        <div className="rounded-3xl border border-line bg-card p-8 text-center sm:p-10">
         <div className="flex justify-center">
           <Logo idSuffix="login" />
         </div>
@@ -86,6 +91,7 @@ export default function LoginPage() {
         >
           <Play className="size-4" /> Not convinced? See a demo roast first
         </Link>
+        </div>
       </motion.div>
     </main>
   );
