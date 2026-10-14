@@ -4,7 +4,7 @@ import { Logo } from "./Logo";
 const socials = [
   { label: "Email", href: "mailto:sainrahul374@gmail.com", Icon: Mail },
   { label: "X / Twitter", href: "https://x.com/RahulSain714", Icon: AtSign },
-  { label: "GitHub", href: "https://github.com/Anos714", Icon: FolderGit2 },
+  { label: "GitHub Repo", href: "https://github.com/Anos714/RoastMyTube", Icon: FolderGit2 },
   { label: "Portfolio", href: "https://rahulxcode.vercel.app", Icon: Globe },
 ];
 

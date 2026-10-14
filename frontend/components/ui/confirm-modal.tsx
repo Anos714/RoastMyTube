@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ModalPortal } from "@/components/ui/modal-portal";
 
 /**
  * Centered confirm modal: blurred backdrop, closes on outside-click or Escape.
@@ -35,8 +36,9 @@ export function ConfirmModal({
   }, [open, onClose]);
 
   return (
-    <AnimatePresence>
-      {open && (
+    <ModalPortal>
+      <AnimatePresence>
+        {open && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -74,5 +76,6 @@ export function ConfirmModal({
         </motion.div>
       )}
     </AnimatePresence>
+    </ModalPortal>
   );
 }
