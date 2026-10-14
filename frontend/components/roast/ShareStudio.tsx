@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toPng } from "html-to-image";
 import { Download, Share2, Copy, X, ImageDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ModalPortal } from "@/components/ui/modal-portal";
 import { ShareCard, SHARE_SIZES, type ShareData, type ShareVariant } from "./ShareCard";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -158,8 +159,9 @@ export function ShareStudio({
     });
 
   return (
-    <AnimatePresence>
-      {open && (
+    <ModalPortal>
+      <AnimatePresence>
+        {open && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -264,6 +266,7 @@ export function ShareStudio({
         </motion.div>
       )}
     </AnimatePresence>
+    </ModalPortal>
   );
 }
 

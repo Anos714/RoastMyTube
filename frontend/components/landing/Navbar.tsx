@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { LogoMark, Logo } from "./Logo";
 import { UserMenu } from "./UserMenu";
 import { useSession } from "@/lib/auth-client";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -18,7 +17,6 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { data: session, isPending } = useSession();
-  const soon = () => toast("Repo goes public soon — star it then");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -51,9 +49,15 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={soon} aria-label="GitHub">
+          <a
+            href="https://github.com/Anos714/RoastMyTube"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub repository"
+            className="grid size-10 place-items-center rounded-xl text-muted transition-colors hover:bg-white/10 hover:text-white"
+          >
             <FolderGit2 className="size-5" />
-          </Button>
+          </a>
           {!isPending && session ? (
             <UserMenu />
           ) : (
