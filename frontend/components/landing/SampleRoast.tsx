@@ -2,22 +2,22 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Share2, RotateCcw, HeartCrack, TriangleAlert } from "lucide-react";
+import { RotateCcw, HeartCrack, TriangleAlert } from "lucide-react";
 import { CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ShareButton } from "@/components/roast/ShareStudio";
 import { ScoreGauge } from "@/components/roast/ScoreGauge";
 import { Typewriter } from "@/components/roast/Typewriter";
 import { Reveal, Tilt, useSpot } from "./primitives";
-import { toast } from "sonner";
 
 const ROAST_TEXT =
-  "Bro watches “How to make $10k/month” between Minecraft parkour compilations and breakup playlists. Subscribed to 14 finance gurus yet Googles “free food near me”. Your algorithm thinks you’re either a future billionaire or a raccoon with WiFi — and honestly, the raccoon is winning.";
+  "Your “watch later” playlist has 400 videos and zero completed dreams — that's not a playlist, that's a graveyard with a play button. Fourteen finance gurus subscribed, and your biggest asset is still the free trial. The algorithm has observed you longer than your own mother, and even IT filed for an intervention. Somewhere between the Minecraft parkour and the 2AM breakup playlists, your ambition didn't die — it just got demonetized.";
 
 const FLAGS = [
-  "Saves ‘gym motivation’ but skips leg day AND videos",
-  "Watches 2x speed but still understands nothing",
-  "Dating advice binges, still texts ‘hey’ with no follow-up",
+  "Treats ‘watch later’ as a retirement plan — 400 saved, 0 finished",
+  "Takes notes from productivity videos, files them into the void",
+  "Knows upload schedules better than family birthdays",
 ];
 
 function useCountUp(target: number, start: boolean, resetKey: number) {
@@ -42,9 +42,8 @@ function useCountUp(target: number, start: boolean, resetKey: number) {
 export function SampleRoast() {
   const [started, setStarted] = useState(false);
   const [replay, setReplay] = useState(0);
-  const score = useCountUp(87, started, replay);
+  const score = useCountUp(94, started, replay);
   const spot = useSpot<HTMLDivElement>();
-  const soon = () => toast("Coming soon — share image export in next step");
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -90,11 +89,12 @@ export function SampleRoast() {
 
         <Reveal y={36}>
           <Tilt max={5} className="mx-auto max-w-3xl">
-            <div className="roast-ring" ref={rootRef}>
+            <div className="roast-ring danger-glow" ref={rootRef}>
               <div
                 onMouseMove={spot}
                 className="spotlight overflow-hidden rounded-[1.3rem] bg-card"
               >
+                <div className="hazard-stripes h-2.5" aria-hidden="true" />
                 {/* header */}
                 <div className="flex items-center justify-between gap-3 border-b border-line bg-card2 px-6 py-4">
                   <div className="flex items-center gap-3">
@@ -111,7 +111,7 @@ export function SampleRoast() {
                       </p>
                     </div>
                   </div>
-                  <Badge variant="toxic" className="shrink-0">TERMINALLY COOKED</Badge>
+                  <Badge variant="toxic" className="shrink-0">CLINICALLY OVERCOOKED</Badge>
                 </div>
 
                 <CardContent className="space-y-6 p-6 sm:p-8">
@@ -122,7 +122,7 @@ export function SampleRoast() {
                         PERSONALITY TITLE
                       </p>
                       <p className="font-display mt-1 text-xl font-bold sm:text-2xl">
-                        “3AM Sigma Grinder Who Never Grinds”
+                        “CEO of Tomorrow, Intern of Today”
                       </p>
                       <Typewriter key={replay} text={ROAST_TEXT} start={started} />
                     </div>
@@ -161,14 +161,22 @@ export function SampleRoast() {
 
                   <div className="flex items-center gap-2 rounded-xl border border-line bg-void p-4 text-sm text-muted">
                     <HeartCrack className="size-4 shrink-0 text-roast" />
-                    Love-life prediction: your watch history will stay “it’s complicated” until you
-                    stop falling for thumbnails.
+                    Your crush will reply faster than your “someday” playlist ever will — which is
+                    to say, never.
                   </div>
 
                   <div className="flex flex-col gap-3 sm:flex-row">
-                    <Button variant="roast" className="btn-shine flex-1" onClick={soon}>
-                      <Share2 /> Share on X
-                    </Button>
+                    <ShareButton
+                      className="flex-1"
+                      label="Share roast"
+                      data={{
+                        personalityTitle: "CEO of Tomorrow, Intern of Today",
+                        brainRotScore: 94,
+                        rank: "Clinically Overcooked",
+                        roast: ROAST_TEXT,
+                        redFlags: FLAGS,
+                      }}
+                    />
                     <Button
                       variant="outline"
                       className="group flex-1"
