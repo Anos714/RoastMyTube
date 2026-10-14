@@ -92,6 +92,7 @@ export function ShareStudio({
   const [variant, setVariant] = useState<ShareVariant>("post");
   const [format, setFormat] = useState<ImgFormat>("png");
   const [busy, setBusy] = useState(false);
+  const [shareHint, setShareHint] = useState(false);
   const { w, h } = SHARE_SIZES[variant];
   const previewScale = Math.min(1, 460 / w, variant === "story" ? 380 / h : 460 / h);
 
@@ -127,16 +128,24 @@ export function ShareStudio({
       toast(`Downloaded ${fileName()}`);
     });
 
+  // Share NEVER downloads: file sheet → text sheet → honest hint.
   const onShare = () =>
     void withNode(async (node) => {
       const blob = await renderBlob(node, variant, format);
       const file = new File([blob], fileName(), { type: blob.type });
       if (navigator.canShare?.({ files: [file] })) {
         await navigator.share({ files: [file], title: "My RoastMyTube roast" });
-      } else {
-        download(blob, fileName());
-        toast("Native share unavailable — downloaded instead");
+        return;
       }
+      if (typeof navigator.share === "function") {
+        await navigator.share({
+          title: "My RoastMyTube roast",
+          text: `${data.personalityTitle} — Brain-Rot ${data.brainRotScore}/100 (${data.rank}). Roasted by RoastMyTube.`,
+        });
+        return;
+      }
+      setShareHint(true);
+      toast("No system share sheet on this device — use Download or Copy below");
     });
 
   const onCopy = () =>
@@ -234,6 +243,11 @@ export function ShareStudio({
                 <Copy /> Copy
               </Button>
             </div>
+            {shareHint && (
+              <p className="mt-3 rounded-xl border border-toxic/40 bg-toxic/10 p-3 text-center text-xs text-toxic">
+                Is device me system share sheet nahi hai — Download ya Copy use kar, wahi fastest hai.
+              </p>
+            )}
             <p className="font-roast-mono mt-3 text-center text-[10px] tracking-[0.2em] text-muted">
               POST = X / LINKEDIN • SQUARE = INSTAGRAM • STORY = WHATSAPP STATUS
             </p>
