@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { LogoMark } from "./Logo";
 import { EmberField, Sparkle } from "./decorations";
-import { toast } from "sonner";
 
 export function CTA() {
   return (
@@ -36,15 +35,16 @@ export function CTA() {
           30 seconds. One login. A lifetime of being humbled by your own algorithm.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <Button
-            variant="toxic"
-            size="lg"
-            onClick={() => toast("Coming soon — auth wiring in next step")}
-            className="btn-shine group"
-          >
-            <LogoMark className="size-5 transition-transform duration-300 group-hover:-rotate-12" idSuffix="cta-btn" />
-            Get Roasted Now — It&apos;s Free
-          </Button>
+          <a href="/login">
+            <Button
+              variant="toxic"
+              size="lg"
+              className="btn-shine group w-full sm:w-auto"
+            >
+              <LogoMark className="size-5 transition-transform duration-300 group-hover:-rotate-12" idSuffix="cta-btn" />
+              Get Roasted Now — It&apos;s Free
+            </Button>
+          </a>
         </div>
         <p className="font-roast-mono mt-5 text-[11px] tracking-[0.25em] text-white/60">
           NO SIGNUP WALL • NO SPAM • JUST PAIN

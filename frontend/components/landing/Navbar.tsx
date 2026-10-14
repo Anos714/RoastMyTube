@@ -1,21 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FolderGit2 } from "lucide-react";
+import { FolderGit2, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LogoMark, Logo } from "./Logo";
+import { signOut, useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { label: "How it works", href: "#how" },
-  { label: "Sample Roasts", href: "#demo" },
-  { label: "Features", href: "#features" },
+  { label: "How it works", href: "/#how" },
+  { label: "Sample Roasts", href: "/#demo" },
+  { label: "Features", href: "/#features" },
 ];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const soon = () => toast("Coming soon — auth wiring in next step");
+  const { data: session, isPending } = useSession();
+  const soon = () => toast("Repo goes public soon — star it then");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -51,15 +53,29 @@ export function Navbar() {
           <Button variant="ghost" size="icon" onClick={soon} aria-label="GitHub">
             <FolderGit2 className="size-5" />
           </Button>
-          <Button
-            variant="roast"
-            size="sm"
-            className="btn-shine sm:h-10 sm:px-5 sm:text-sm"
-            onClick={soon}
-          >
-            <LogoMark className="size-4" idSuffix="nav-cta" />
-            Get Roasted
-          </Button>
+          {!isPending && session ? (
+            <>
+              <a href="/roast">
+                <Button variant="outline" size="sm" className="sm:h-10 sm:px-5 sm:text-sm">
+                  My Roasts
+                </Button>
+              </a>
+              <Button variant="ghost" size="icon" onClick={() => signOut()} aria-label="Sign out">
+                <LogOut className="size-5" />
+              </Button>
+            </>
+          ) : (
+            <a href="/login">
+              <Button
+                variant="roast"
+                size="sm"
+                className="btn-shine sm:h-10 sm:px-5 sm:text-sm"
+              >
+                <LogoMark className="size-4" idSuffix="nav-cta" />
+                Get Roasted
+              </Button>
+            </a>
+          )}
         </div>
       </nav>
     </header>
