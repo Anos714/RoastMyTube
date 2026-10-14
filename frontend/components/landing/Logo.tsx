@@ -52,7 +52,7 @@ export function Logo({
   markClass = "size-9",
   compact = false,
   idSuffix = "a",
-  href = "#top",
+  href = "/",
 }: {
   markClass?: string;
   compact?: boolean;
