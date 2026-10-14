@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Share2,
   RotateCcw,
   TriangleAlert,
   HeartCrack,
@@ -14,13 +13,13 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ShareButton } from "@/components/roast/ShareStudio";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { LogoMark } from "@/components/landing/Logo";
 import { ScoreGauge } from "@/components/roast/ScoreGauge";
 import { Typewriter } from "@/components/roast/Typewriter";
 import { signOut, useSession } from "@/lib/auth-client";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface Report {
@@ -165,17 +164,6 @@ export default function RoastPage() {
     }
   };
 
-  const share = async () => {
-    if (!report) return;
-    const text = `${report.personalityTitle} — Brain-Rot ${report.brainRotScore}/100 (${report.rank}). Roasted by RoastMyTube.`;
-    try {
-      await navigator.clipboard.writeText(text);
-      toast("Roast copied — go embarrass yourself publicly");
-    } catch {
-      toast("Copy failed — screenshot it like it's 2012");
-    }
-  };
-
   if (isPending) {
     return (
       <main className="grid min-h-screen place-items-center">
@@ -306,8 +294,9 @@ export default function RoastPage() {
               transition={{ duration: 0.5 }}
               className="mt-6"
             >
-              <div className="roast-ring">
-                <div className="overflow-hidden rounded-[1.3rem] bg-card">
+              <div className="roast-ring danger-glow">
+                <div className="scanlines relative overflow-hidden rounded-[1.3rem] bg-card">
+                  <div className="hazard-stripes h-2.5" aria-hidden="true" />
                   <div className="flex items-center justify-between gap-3 border-b border-line bg-card2 px-6 py-4">
                     <div>
                       <p className="font-display font-bold">Your Roast Report</p>
@@ -361,9 +350,17 @@ export default function RoastPage() {
                       {report.loveLifePrediction}
                     </div>
                     <div className="flex flex-col gap-3 sm:flex-row">
-                      <Button variant="roast" className="btn-shine flex-1" onClick={share}>
-                        <Share2 /> Copy roast
-                      </Button>
+                      <ShareButton
+                        className="flex-1"
+                        label="Share / Download"
+                        data={{
+                          personalityTitle: report.personalityTitle,
+                          brainRotScore: report.brainRotScore,
+                          rank: report.rank,
+                          roast: report.roast,
+                          redFlags: report.redFlags,
+                        }}
+                      />
                       <Button variant="outline" className="flex-1" onClick={start}>
                         <RotateCcw /> Roast me again
                       </Button>

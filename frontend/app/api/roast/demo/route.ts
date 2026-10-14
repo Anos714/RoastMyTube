@@ -3,42 +3,42 @@ import { LanguageSchema, type RoastReport } from "@/lib/i18n-roast";
 
 const EN: RoastReport = {
   roast:
-    "Bro watches “How to make $10k/month” between Minecraft parkour compilations and breakup playlists at 2AM. Subscribed to fourteen finance gurus yet Googles “free food near me” with complete confidence. The algorithm has studied you for years and its conclusion is devastating: you are either a future billionaire doing deep research, or a raccoon with WiFi and unlimited free time. Every data point screams raccoon. Your watch-later playlist is a museum of ambitions you abandoned by Tuesday.",
-  brainRotScore: 87,
-  rank: "Terminally Cooked",
+    "Your “watch later” playlist has 400 videos and zero completed dreams — that's not a playlist, that's a graveyard with a play button. You consume “How to make $10k/month” like medicine and remain financially homeopathic. Fourteen finance gurus subscribed, and your biggest asset is still the free trial. The algorithm has observed you longer than your own mother, and even IT filed for an intervention. You don't have a sleep schedule, you have a surrender schedule. Somewhere between the Minecraft parkour and the 2AM breakup playlists, your ambition didn't die — it just got demonetized.",
+  brainRotScore: 94,
+  rank: "Clinically Overcooked",
   redFlags: [
-    "Saves gym motivation videos but skips leg day AND the video",
-    "Watches everything at 2x speed and still understands nothing",
-    "Binges dating advice, still opens with just “hey”",
+    "Treats “watch later” as a retirement plan for dreams — 400 saved, 0 finished",
+    "Takes notes from productivity videos, files them directly into the void",
+    "Knows every creator's upload schedule better than his own family's birthdays",
   ],
-  personalityTitle: "3AM Sigma Grinder Who Never Grinds",
+  personalityTitle: "CEO of Tomorrow, Intern of Today",
   channelRoasts: [
-    "Finance Guru #7: your net worth went down since subscribing, impressive reverse mentorship.",
-    "Minecraft Parkour Daily: thirty years old watching block jumping like it pays rent.",
-    "LoFi Girl: she has been studying for six years straight — take the hint and log off.",
+    "Finance Guru #7: your net worth went DOWN since subscribing — historic reverse mentorship.",
+    "Minecraft Parkour Daily: a grown adult studying block jumping like it's a pension scheme.",
+    "LoFi Girl: she finished six degrees in the time you finished zero videos — log off.",
   ],
   loveLifePrediction:
-    "Your watch history will stay “it's complicated” until you stop falling for thumbnails with red arrows.",
+    "Your crush will reply faster than your “someday” playlist ever will — which is to say, never. The red arrows lied to you.",
 };
 
 const HINGLISH: RoastReport = {
   roast:
-    "Bhai 3 baje dopahar me “5AM Club kaise join kare” dekh raha hai, uthta 11 baje hai. Chaudah finance guru subscribe kar rakhe hain, balance me 214 rupaye hain. Algorithm ne saalon research karke ek hi baat boli hai: ya to tu future billionaire hai, ya WiFi wala kabootar. Aur beta, saare signals kabootar bol rahe hain. Teri watch-later playlist un sapno ka kabristan hai jo Tuesday tak dafan ho gaye.",
-  brainRotScore: 87,
-  rank: "Terminally Cooked",
+    "Teri watch-later me 400 video aur 0 poore sapne — ye playlist nahi, play button laga kabristan hai. “$10k/month kaise kamaye” dawai ki tarah khaata hai, ameer homeopathy se bhi nahi hua. Chaudah finance guru subscribe, sabse badi asset abhi bhi free trial. Algorithm ne tujhe teri mummy se zyada observe kiya hai, aur USNE bhi intervention file kar di. Tera koi sleep schedule nahi, surrender schedule hai. Minecraft parkour aur 2 baje wali breakup playlists ke beech me teri ambition mari nahi — demonetize ho gayi.",
+  brainRotScore: 94,
+  rank: "Clinically Overcooked",
   redFlags: [
-    "Gym motivation save karta hai, leg day aur video dono skip",
-    "Sab 2x speed pe dekhta hai, samajh phir bhi zero",
-    "Dating advice ke 40 video, message phir bhi sirf “hey”",
+    "Watch-later ko sapno ka retirement plan bana rakha — 400 save, 0 poore",
+    "Productivity video se notes banata hai, seedha void me file karta hai",
+    "Creators ka upload schedule ghar walon ke birthday se zyada yaad hai",
   ],
-  personalityTitle: "3 Baje Wala Sigma, Uthta 11 Baje",
+  personalityTitle: "Kal Ka CEO, Aaj Ka Intern",
   channelRoasts: [
-    "Finance Guru #7: subscribe ke baad balance ulta ghat gaya, reverse mentorship ho gayi.",
-    "Minecraft Parkour Daily: block wali jumping dekh ke lagta hai kiraya wahi dega.",
-    "LoFi Girl: wo 6 saal se padh rahi hai — hint samajh aur log off kar.",
+    "Finance Guru #7: subscribe ke baad net worth ulta ghati — historic reverse mentorship.",
+    "Minecraft Parkour Daily: block jumping ko pension scheme samajh ke padh raha hai.",
+    "LoFi Girl: usne 6 degree le li, tune 0 video poori ki — log off kar.",
   ],
   loveLifePrediction:
-    "Jab tak red arrow wale thumbnails pe fisalta rahega, relationship status “it's complicated” hi rahega.",
+    "Crush ka reply teri “someday” playlist se pehle aayega — matlab kabhi nahi. Red arrow ne dhokha diya.",
 };
 
 export async function GET(req: NextRequest) {

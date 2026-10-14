@@ -240,6 +240,47 @@ body {
   animation-play-state: paused;
 }
 
+/* Hazard tape strip — danger zoning for roast cards */
+.hazard-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    #ffd400 0 14px,
+    #0a0a0a 14px 28px
+  );
+}
+
+/* Pulsing red danger glow for the live roast card */
+@keyframes danger-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 24px rgba(255, 0, 51, 0.25),
+      0 0 64px rgba(255, 0, 51, 0.12);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(255, 0, 51, 0.5),
+      0 0 96px rgba(255, 0, 51, 0.22);
+  }
+}
+.danger-glow {
+  animation: danger-glow 2.8s ease-in-out infinite;
+}
+
+/* CRT scanlines overlay for threat panels */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 3px,
+    rgba(0, 0, 0, 0.22) 3px 4px
+  );
+}
+
 ::selection {
   background: #ff0033;
   color: white;
@@ -256,7 +297,8 @@ body {
   .animate-flicker,
   .animate-twinkle,
   .animate-ember,
-  .roast-ring {
+  .roast-ring,
+  .danger-glow {
     animation: none !important;
   }
   .btn-shine::after {

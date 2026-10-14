@@ -33,7 +33,7 @@ export function HowItWorks() {
   const spot = useSpot<HTMLDivElement>();
 
   useEffect(() => {
-    const t = setTimeout(() => setVal(87), 600);
+    const t = setTimeout(() => setVal(94), 600);
     return () => clearTimeout(t);
   }, []);
 
@@ -98,7 +98,7 @@ export function HowItWorks() {
               </p>
             </div>
             <span className="rounded-full bg-toxic px-3 py-1 font-roast-mono text-xs font-bold text-black">
-              TERMINALLY COOKED
+              CLINICALLY OVERCOOKED
             </span>
           </div>
           <Progress value={val} className="mt-5 h-4" />
