@@ -1,26 +1,32 @@
-import { Flame, FolderGit2, AtSign } from "lucide-react";
+import { FolderGit2, AtSign } from "lucide-react";
+import { Logo } from "./Logo";
 
 export function Footer() {
   return (
     <footer className="border-t border-line">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
-        <div className="flex items-center gap-2">
-          <span className="grid size-8 place-items-center rounded-lg bg-roast">
-            <Flame className="size-4 text-white" />
-          </span>
-          <span className="font-display text-sm font-bold">
-            Roast<span className="text-roast">My</span>Tube
-          </span>
-          <span className="ml-2 text-xs text-muted">Built for fun + resume 💼</span>
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-5 px-4 py-8 sm:flex-row sm:px-6">
+        <Logo compact idSuffix="footer" />
+        <div className="text-center sm:text-left">
+          <p className="text-[11px] text-muted">
+            Parody project. Not affiliated with YouTube or Google. Roasts are playful, PG-13.
+          </p>
+          <p className="font-roast-mono mt-1 text-[10px] tracking-[0.18em] text-muted/70">
+            SET IN SPACE GROTESK &amp; INTER — NO TEMPLATES WERE HARMED
+          </p>
         </div>
-        <p className="text-center text-[11px] text-muted">
-          Parody project. Not affiliated with YouTube or Google. Roasts are playful, PG-13.
-        </p>
-        <div className="flex items-center gap-4 text-muted">
-          <a href="#top" aria-label="X" className="transition-colors hover:text-white">
+        <div className="flex items-center gap-2 text-muted">
+          <a
+            href="#top"
+            aria-label="X"
+            className="grid size-9 place-items-center rounded-lg transition-all hover:-translate-y-0.5 hover:bg-white/10 hover:text-white"
+          >
             <AtSign className="size-4" />
           </a>
-          <a href="#top" aria-label="GitHub" className="transition-colors hover:text-white">
+          <a
+            href="#top"
+            aria-label="GitHub"
+            className="grid size-9 place-items-center rounded-lg transition-all hover:-translate-y-0.5 hover:bg-white/10 hover:text-white"
+          >
             <FolderGit2 className="size-4" />
           </a>
         </div>

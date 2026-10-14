@@ -1,8 +1,11 @@
 "use client";
 
-import { Flame, FolderGit2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { FolderGit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LogoMark, Logo } from "./Logo";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const links = [
   { label: "How it works", href: "#how" },
@@ -11,23 +14,34 @@ const links = [
 ];
 
 export function Navbar() {
-  const soon = () => toast("Coming soon — auth wiring in next step 🔥");
+  const [scrolled, setScrolled] = useState(false);
+  const soon = () => toast("Coming soon — auth wiring in next step");
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-void/80 backdrop-blur-xl">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="#top" className="flex items-center gap-2">
-          <span className="grid size-9 place-items-center rounded-xl bg-roast shadow-[0_0_24px_rgba(255,0,51,0.5)]">
-            <Flame className="size-5 text-white" />
-          </span>
-          <span className="font-display text-lg font-bold tracking-tight">
-            Roast<span className="text-roast">My</span>Tube
-          </span>
-        </a>
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b backdrop-blur-xl transition-all duration-300",
+        scrolled ? "border-line bg-void/90 shadow-[0_8px_30px_rgba(0,0,0,0.5)]" : "border-transparent bg-void/60"
+      )}
+    >
+      <nav
+        className={cn(
+          "mx-auto flex max-w-6xl items-center justify-between px-4 transition-all duration-300 sm:px-6",
+          scrolled ? "h-14" : "h-16"
+        )}
+      >
+        <Logo idSuffix="nav" />
 
         <div className="hidden items-center gap-7 text-sm text-muted md:flex">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="transition-colors hover:text-white">
+            <a key={l.href} href={l.href} className="nav-link transition-colors hover:text-white">
               {l.label}
             </a>
           ))}
@@ -37,8 +51,14 @@ export function Navbar() {
           <Button variant="ghost" size="icon" onClick={soon} aria-label="GitHub">
             <FolderGit2 className="size-5" />
           </Button>
-          <Button variant="roast" size="sm" className="sm:h-10 sm:px-5 sm:text-sm" onClick={soon}>
-            Get Roasted 🔥
+          <Button
+            variant="roast"
+            size="sm"
+            className="btn-shine sm:h-10 sm:px-5 sm:text-sm"
+            onClick={soon}
+          >
+            <LogoMark className="size-4" idSuffix="nav-cta" />
+            Get Roasted
           </Button>
         </div>
       </nav>
