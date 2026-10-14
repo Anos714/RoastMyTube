@@ -2,6 +2,11 @@ import { NeedReloginError, QuotaExceededError, EmptyProfileError } from "./error
 
 const YT = "https://www.googleapis.com/youtube/v3";
 
+export interface ObscureLike {
+  title: string;
+  views: number;
+}
+
 export interface YouTubeProfile {
   channelTitle: string;
   subs: number;
@@ -11,6 +16,8 @@ export interface YouTubeProfile {
   likedTitles: string[];
   likedCategories: string[];
   playlists: string[];
+  /** Liked videos with suspiciously low view counts — prime roast ammo. */
+  obscureLikes: ObscureLike[];
 }
 
 async function yt<T>(path: string, token: string): Promise<T> {
@@ -37,22 +44,38 @@ interface ListRes {
 }
 
 /**
- * 4 quota units per call (1 per endpoint — NEVER search.list at 100 units).
- * 10k daily project quota ≈ 2,500 roasts/day.
+ * 5 quota units per roast (1 per endpoint — NEVER search.list at 100 units).
+ * maxResults 50 costs the same 1 unit as 25, so we take the full buffet.
+ * 10k daily project quota ≈ 2,000 roasts/day.
  */
 export async function getYouTubeProfile(accessToken: string): Promise<YouTubeProfile> {
-  const [channels, subs, liked, playlists] = await Promise.all([
+  const [channels, subsAlpha, subsRel, liked, playlists] = await Promise.all([
     yt<ListRes>(`/channels?part=statistics,snippet&mine=true`, accessToken),
-    yt<ListRes>(`/subscriptions?part=snippet&mine=true&maxResults=25&order=alphabetical`, accessToken),
-    yt<ListRes>(`/videos?part=snippet,statistics&myRating=like&maxResults=25`, accessToken),
-    yt<ListRes>(`/playlists?part=snippet&mine=true&maxResults=10`, accessToken),
+    yt<ListRes>(`/subscriptions?part=snippet&mine=true&maxResults=50&order=alphabetical`, accessToken),
+    yt<ListRes>(`/subscriptions?part=snippet&mine=true&maxResults=50&order=relevance`, accessToken),
+    yt<ListRes>(`/videos?part=snippet,statistics&myRating=like&maxResults=50`, accessToken),
+    yt<ListRes>(`/playlists?part=snippet&mine=true&maxResults=25`, accessToken),
   ]);
 
   const ch = channels.items?.[0];
-  const subscriptions = (subs.items ?? []).map((s) => s.snippet?.title ?? "Unknown").filter(Boolean);
+  const subscriptions = [
+    ...new Set(
+      [...(subsAlpha.items ?? []), ...(subsRel.items ?? [])]
+        .map((s) => s.snippet?.title ?? "Unknown")
+        .filter(Boolean)
+    ),
+  ];
   const likedTitles = (liked.items ?? []).map((v) => v.snippet?.title ?? "Unknown").filter(Boolean);
   const likedCategories = [...new Set((liked.items ?? []).map((v) => v.snippet?.categoryId).filter((c): c is string => !!c))];
   const playlistNames = (playlists.items ?? []).map((p) => p.snippet?.title ?? "Unknown").filter(Boolean);
+  const obscureLikes = (liked.items ?? [])
+    .map((v) => ({
+      title: v.snippet?.title ?? "Unknown",
+      views: Number(v.statistics?.viewCount ?? 0),
+    }))
+    .filter((v) => v.views > 0)
+    .sort((a, b) => a.views - b.views)
+    .slice(0, 10);
 
   if (!ch && subscriptions.length === 0 && likedTitles.length === 0) {
     throw new EmptyProfileError();
@@ -67,5 +90,6 @@ export async function getYouTubeProfile(accessToken: string): Promise<YouTubePro
     likedTitles,
     likedCategories,
     playlists: playlistNames,
+    obscureLikes,
   };
 }

@@ -15,12 +15,15 @@ import { roasts } from "@/db/schema";
 import { requireUser } from "@/lib/require-user";
 import { getValidAccessToken } from "@/lib/google-token";
 import { getYouTubeProfile } from "@/lib/youtube";
-import { LanguageSchema } from "@/lib/i18n-roast";
+import { LanguageSchema, TakeoutSummarySchema } from "@/lib/i18n-roast";
 import { generateRoast } from "@/lib/llm";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { toErrorResponse } from "@/lib/errors";
 
-const BodySchema = z.object({ language: LanguageSchema.optional() });
+const BodySchema = z.object({
+  language: LanguageSchema.optional(),
+  takeout: TakeoutSummarySchema.optional(),
+});
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,13 +31,13 @@ export async function POST(req: NextRequest) {
     if (!checkRateLimit(getClientIp(req))) {
       return NextResponse.json({ error: "slow_down" }, { status: 429 });
     }
-    const { language = "en" } = BodySchema.parse(
+    const { language = "en", takeout } = BodySchema.parse(
       await req.json().catch(() => ({}))
     );
 
     const token = await getValidAccessToken(user.id);
     const profile = await getYouTubeProfile(token);
-    const result = await generateRoast(profile, language);
+    const result = await generateRoast(profile, language, takeout);
 
     await db.insert(roasts).values({
       userId: user.id,

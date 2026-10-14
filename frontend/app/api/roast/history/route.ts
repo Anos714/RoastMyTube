@@ -25,3 +25,13 @@ export async function GET() {
     return toErrorResponse(err);
   }
 }
+
+export async function DELETE() {
+  try {
+    const user = await requireUser();
+    await db.delete(roasts).where(eq(roasts.userId, user.id));
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    return toErrorResponse(err);
+  }
+}

@@ -15,6 +15,15 @@ export const ROAST_SCHEMA = z.object({
 });
 export type RoastReport = z.infer<typeof ROAST_SCHEMA>;
 
+/** Aggregate parsed 100% in the browser from a Takeout upload — raw history never leaves the device. */
+export const TakeoutSummarySchema = z.object({
+  topSearches: z.array(z.string()).max(15),
+  topWatchedChannels: z.array(z.string()).max(15),
+  lateNightCount: z.number().int().min(0),
+  totalItems: z.number().int().min(0),
+});
+export type TakeoutSummary = z.infer<typeof TakeoutSummarySchema>;
+
 const SCHEMA_HINT = `Return ONLY a JSON object with exactly these keys: roast (string, ~120 words), brainRotScore (integer 0-100), rank (string, e.g. "Terminally Cooked"), redFlags (array of 3 strings), personalityTitle (string, funny 5-word title), channelRoasts (array of 3 one-line strings), loveLifePrediction (string). No markdown fences, no preamble, no trailing text.`;
 
 const BRUTAL_RULES_EN = `MODE: post-mortem. You are performing an autopsy on this person's entire personality using their watch history as evidence. Be MERCILESS but clean: PG-13, zero profanity, zero slurs, zero hate, zero self-harm content. Your weapons are SPECIFICS, not insults — name their actual videos and channels, expose contradictions (motivation videos watched from bed at 3PM, finance gurus subscribed while broke, gym content saved but never opened), count their delusions. Attack the PATTERNS: sleep schedule, ambition graveyard, dating copium, productivity theater. Every sentence should make them laugh and then feel personally attacked. Never be generic — if you could say it about anyone, delete it and write something only true about THIS person. Score honestly: taste this generic and algorithmic deserves 75+.`;
@@ -28,15 +37,28 @@ export const SYSTEM_PROMPTS: Record<RoastLanguage, string> = {
 
 export function buildRoastPrompt(
   profile: YouTubeProfile,
-  language: RoastLanguage
+  language: RoastLanguage,
+  takeout?: TakeoutSummary
 ): { system: string; user: string } {
-  const user = [
+  const obscure = profile.obscureLikes
+    .slice(0, 8)
+    .map((v) => `${v.title} (${v.views.toLocaleString("en-IN")} views)`)
+    .join(" | ");
+  const lines = [
     `VICTIM DATA — use every line of this as ammunition. Name real titles:`,
     `Channel: ${profile.channelTitle} (subs: ${profile.subs}, views: ${profile.totalViews}, uploads: ${profile.videoCount})`,
-    `Top subscriptions: ${profile.subscriptions.slice(0, 15).join(" | ") || "none"}`,
-    `Recently liked: ${profile.likedTitles.slice(0, 15).join(" | ") || "none"}`,
+    `Top subscriptions: ${profile.subscriptions.slice(0, 30).join(" | ") || "none"}`,
+    `Recently liked: ${profile.likedTitles.slice(0, 30).join(" | ") || "none"}`,
+    obscure
+      ? `OBSCURE LIKES (nobody-watched videos they endorsed — mock these mercilessly): ${obscure}`
+      : null,
     `Playlists: ${profile.playlists.join(" | ") || "none"}`,
-    SCHEMA_HINT,
-  ].join("\n");
-  return { system: SYSTEM_PROMPTS[language], user };
+  ];
+  if (takeout && (takeout.topSearches.length > 0 || takeout.topWatchedChannels.length > 0)) {
+    lines.push(
+      `TAKEOUT INTEL (user-uploaded real search+watch history, parsed locally — LETHAL ammo, quote the most embarrassing searches verbatim): top searches: ${takeout.topSearches.slice(0, 12).join(" | ") || "none"} | late-night searches (12–5AM): ${takeout.lateNightCount} | most-watched channels: ${takeout.topWatchedChannels.slice(0, 12).join(" | ") || "none"} | history items scanned: ${takeout.totalItems}`
+    );
+  }
+  lines.push(SCHEMA_HINT);
+  return { system: SYSTEM_PROMPTS[language], user: lines.filter(Boolean).join("\n") };
 }
