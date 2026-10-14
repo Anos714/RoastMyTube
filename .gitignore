@@ -1,0 +1,11 @@
+# Root ignores — app-level rules live in frontend/.gitignore
+.DS_Store
+*.pem
+.idea/
+.vscode/*
+
+# hoisted / root tooling deps (monorepo workspaces may hoist here later)
+node_modules/
+
+# root-level env files (frontend/.gitignore already covers frontend/)
+.env*.local
