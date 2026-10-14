@@ -6,6 +6,8 @@ import { Share2, RotateCcw, HeartCrack, TriangleAlert } from "lucide-react";
 import { CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ScoreGauge } from "@/components/roast/ScoreGauge";
+import { Typewriter } from "@/components/roast/Typewriter";
 import { Reveal, Tilt, useSpot } from "./primitives";
 import { toast } from "sonner";
 
@@ -35,88 +37,6 @@ function useCountUp(target: number, start: boolean, resetKey: number) {
     return () => cancelAnimationFrame(raf);
   }, [target, start, resetKey]);
   return v;
-}
-
-/** Roast paragraph that types itself out word by word, with a caret. */
-function Typewriter({ text, start }: { text: string; start: boolean }) {
-  const words = text.split(" ");
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!start || count >= words.length) return;
-    const t = setTimeout(() => setCount((c) => c + 1), 34);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [start, count]);
-
-  return (
-    <p className="mt-3 min-h-28 text-sm leading-relaxed text-white/85 sm:min-h-24">
-      {words.slice(0, count).join(" ")}
-      {count < words.length && <span className="ml-0.5 animate-pulse text-roast">▍</span>}
-    </p>
-  );
-}
-
-/** Circular SVG gauge — needle-free, gradient stroke, live count in the middle. */
-function ScoreGauge({ score }: { score: number }) {
-  return (
-    <div className="relative mx-auto size-48 shrink-0 sm:mx-0">
-      <svg viewBox="0 0 200 200" className="size-full -rotate-90">
-        <defs>
-          <linearGradient id="rmt-gauge" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#FF0033" />
-            <stop offset="55%" stopColor="#FF6A00" />
-            <stop offset="100%" stopColor="#FFD400" />
-          </linearGradient>
-        </defs>
-        {/* tick ring */}
-        {Array.from({ length: 40 }).map((_, i) => {
-          const a = (i / 40) * Math.PI * 2;
-          const lit = i / 40 <= score / 100;
-          const x1 = 100 + Math.cos(a) * 88;
-          const y1 = 100 + Math.sin(a) * 88;
-          const x2 = 100 + Math.cos(a) * (i % 10 === 0 ? 78 : 83);
-          const y2 = 100 + Math.sin(a) * (i % 10 === 0 ? 78 : 83);
-          return (
-            <line
-              key={i}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke={lit ? "#FFD400" : "#2b2b2b"}
-              strokeWidth={i % 10 === 0 ? 3 : 1.5}
-              strokeLinecap="round"
-              style={{ transition: "stroke 0.2s" }}
-            />
-          );
-        })}
-        <circle cx="100" cy="100" r="66" fill="none" stroke="#222" strokeWidth="13" />
-        <circle
-          cx="100"
-          cy="100"
-          r="66"
-          fill="none"
-          stroke="url(#rmt-gauge)"
-          strokeWidth="13"
-          strokeLinecap="round"
-          pathLength={100}
-          strokeDasharray="100"
-          strokeDashoffset={100 - score}
-          style={{
-            transition: "stroke-dashoffset 0.12s linear",
-            filter: "drop-shadow(0 0 10px rgba(255,0,51,0.55))",
-          }}
-        />
-      </svg>
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="text-center">
-          <p className="font-roast-mono text-5xl font-bold text-white tabular-nums">{score}</p>
-          <p className="font-roast-mono mt-1 text-[10px] tracking-[0.3em] text-muted">/ 100</p>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 export function SampleRoast() {

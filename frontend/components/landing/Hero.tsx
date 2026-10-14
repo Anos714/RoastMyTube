@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LogoMark } from "./Logo";
 import { SpinBadge, FlickerFlame, Squiggle, Sparkle } from "./decorations";
-import { toast } from "sonner";
 import type { CSSProperties, MouseEvent } from "react";
 
 const fadeUp = {
@@ -25,8 +24,6 @@ const miniCards = [
 ];
 
 export function Hero() {
-  const soon = () => toast("Coming soon — connect YouTube in next step");
-
   const onSpot = (e: MouseEvent<HTMLElement>) => {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
@@ -124,10 +121,12 @@ export function Hero() {
           custom={3}
           className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <Button size="lg" variant="roast" onClick={soon} className="btn-shine group w-full sm:w-auto">
-            <LogoMark className="size-5 transition-transform duration-300 group-hover:-rotate-12" idSuffix="hero-cta" />
-            Connect YouTube &amp; Get Roasted
-          </Button>
+          <a href="/login" className="w-full sm:w-auto">
+            <Button size="lg" variant="roast" className="btn-shine group w-full sm:w-auto">
+              <LogoMark className="size-5 transition-transform duration-300 group-hover:-rotate-12" idSuffix="hero-cta" />
+              Connect YouTube &amp; Get Roasted
+            </Button>
+          </a>
           <a href="#demo" className="group w-full sm:w-auto">
             <Button size="lg" variant="outline" className="w-full sm:w-auto">
               <Play className="transition-transform duration-300 group-hover:scale-125" /> See Demo Roast
