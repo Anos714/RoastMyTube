@@ -24,6 +24,14 @@ export function Footer() {
             >
               Rahul Sain
             </a>
+            <span className="mx-2 text-line">|</span>
+            <a href="/privacy" className="transition-colors hover:text-white">
+              Privacy
+            </a>
+            <span className="mx-2 text-line">•</span>
+            <a href="/terms" className="transition-colors hover:text-white">
+              Terms
+            </a>
           </p>
           <p className="mt-1.5 text-[11px] text-muted">
             Parody project. Not affiliated with YouTube or Google. Roasts are playful, PG-13.
