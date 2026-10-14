@@ -1,24 +1,11 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+// Self-hosted fonts (Fontsource) — no runtime fetch to Google Fonts,
+// so `next build` never depends on fonts.googleapis.com availability.
+import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/jetbrains-mono";
 import { Toaster } from "sonner";
 import "./globals.css";
-
-const display = Space_Grotesk({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const body = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-});
-
-const mono = JetBrains_Mono({
-  variable: "--font-roast-mono",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: "RoastMyTube — Get Brutally Roasted by AI Based on Your YouTube History",
@@ -39,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} h-full dark`}>
+    <html lang="en" className="h-full dark">
       <body className="min-h-full flex flex-col bg-void text-white antialiased">
         {children}
         <Toaster theme="dark" position="bottom-center" toastOptions={{ style: { background: "#131313", border: "1px solid #262626" } }} />
