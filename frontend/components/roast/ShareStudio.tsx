@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toPng } from "html-to-image";
 import { Download, Share2, Copy, X, ImageDown } from "lucide-react";
@@ -90,12 +90,27 @@ export function ShareStudio({
   data: ShareData;
 }) {
   const nodeRef = useRef<HTMLDivElement>(null);
+  const prevBoxRef = useRef<HTMLDivElement>(null);
   const [variant, setVariant] = useState<ShareVariant>("post");
   const [format, setFormat] = useState<ImgFormat>("png");
   const [busy, setBusy] = useState(false);
   const [shareHint, setShareHint] = useState(false);
+  const [prevW, setPrevW] = useState(440);
   const { w, h } = SHARE_SIZES[variant];
-  const previewScale = Math.min(1, 460 / w, variant === "story" ? 380 / h : 460 / h);
+
+  // Measure the actual preview box (small phones!) instead of assuming 460px.
+  useEffect(() => {
+    if (!open) return;
+    const el = prevBoxRef.current;
+    if (!el) return;
+    setPrevW(el.clientWidth);
+    const ro = new ResizeObserver(() => setPrevW(el.clientWidth));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [open ]);
+
+  // Fit width, and cap tall variants so the whole modal stays on-screen.
+  const previewScale = Math.min(1, prevW / w, 400 / h);
 
   const fileName = () =>
     `roastmytube-${variant}-${data.brainRotScore}.${format === "jpg" ? "jpg" : format}`;
@@ -174,7 +189,7 @@ export function ShareStudio({
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-2xl rounded-2xl border border-line bg-card p-5 sm:p-6"
+            className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-line bg-card p-5 sm:p-6"
           >
             <div className="flex items-center justify-between">
               <p className="font-display text-lg font-bold">
@@ -190,7 +205,10 @@ export function ShareStudio({
             </div>
 
             {/* preview */}
-            <div className="mt-4 grid place-items-center overflow-hidden rounded-xl border border-line bg-void p-4">
+            <div
+              ref={prevBoxRef}
+              className="mt-4 grid place-items-center overflow-hidden rounded-xl border border-line bg-void p-4"
+            >
               <div style={{ width: w * previewScale, height: h * previewScale }} className="overflow-hidden rounded-lg">
                 <div style={{ transform: `scale(${previewScale})`, transformOrigin: "top left" }}>
                   <ShareCard data={data} variant={variant} />
